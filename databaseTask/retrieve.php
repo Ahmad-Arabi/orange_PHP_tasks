@@ -97,5 +97,72 @@ else {
 
 echo "<hr>";
 
+//6
+$sql = "SELECT students.first_name, students.last_name, grade FROM enrollments
+        JOIN students ON enrollments.student_id = students.student_id
+        WHERE enrollments.grade = 'A'";
+$result = mysqli_query($conn, $sql);
+
+if (mysqli_num_rows($result)>0) {
+    
+
+    while ($row= mysqli_fetch_assoc($result)) {
+        echo "{$row["first_name"]} {$row["last_name"]} got {$row["grade"]} <br>";
+    }
+} 
+else {
+    echo "No students found with mark A";
+}
+
+echo "<hr>";
+
+//7
+$sql = "SELECT courses.course_name, instructors.first_name, instructors.last_name, semester FROM course_assignments
+        JOIN courses ON course_assignments.course_id = courses.course_id
+        JOIN instructors ON course_assignments.instructor_id = instructors.instructor_id
+        WHERE course_assignments.semester = 'Fall'";
+$result = mysqli_query($conn, $sql);
+
+if (mysqli_num_rows($result)>0) {
+    
+
+    while ($row= mysqli_fetch_assoc($result)) {
+        echo "{$row["first_name"]} {$row["last_name"]} assigned to {$row["course_name"]} course for {$row["semester"]} semester <br>";
+    }
+} 
+else {
+    echo "No courses found for fall semester";
+}
+
+echo "<hr>";
+
+//8
+$sql = "SELECT AVG(
+            CASE    
+                WHEN grade = 'A' THEN 4.0
+                WHEN grade = 'A-' THEN 3.7
+                WHEN grade = 'B+' THEN 3.3
+                WHEN grade = 'B' THEN 3.0
+                ELSE NULL
+            END
+        ) AS average_grade, courses.course_name
+        FROM enrollments
+        JOIN courses ON  enrollments.course_id = courses.course_id
+        WHERE enrollments.course_id = 3";
+$result = mysqli_query($conn, $sql);
+
+if (mysqli_num_rows($result)>0) {
+    
+
+    while ($row= mysqli_fetch_assoc($result)) {
+        echo "The average grade for {$row["course_name"]} is {$row["average_grade"]} <br>";
+    }
+} 
+else {
+    echo "No courses found for fall semester";
+}
+
+echo "<hr>";
+
 mysqli_close($conn);
 ?>
